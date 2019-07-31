@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/lvpchen/workspace_lvpchen/BaseAlgorithm/sort.cpp
+iostream
+-
+cstdlib
+-
+cstring
+-
+cmath
+-
+vector
+-
+unistd.h
+-
+

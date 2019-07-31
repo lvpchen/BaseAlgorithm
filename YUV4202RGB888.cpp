@@ -1,5 +1,28 @@
 //yyyyuv
 
+#include <stdio.h>
+
+#include <string>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+
+std::string read_file(const char* path)
+{
+    std::string buf;
+
+    FILE* fp = fopen(path, "rb");
+    fseek(fp, 0, SEEK_END);
+    int len = ftell(fp);
+    rewind(fp);
+    buf.resize(len);
+    fread((void*)buf.data(), 1, len, fp);
+    fclose(fp);
+
+    return buf;
+}
+
+
 void YUV4202RGB888(const unsigned char *p_y,
                    const unsigned char *p_u,
                    const unsigned char *p_v,
@@ -131,3 +154,28 @@ void YUV4202RGB888(const unsigned char *p_y,
       "q9", "q10", "q11", "q12", "q13", "q14", "q15"  
   );
 }
+
+int main(int argc, char** argv)
+{
+    const char* imagepath = argv[1];
+
+    int w = 1280;
+    int h = 720;
+
+    std::string nv21_buf = read_file(imagepath);
+    cv::Mat nv21(h + h/2, w, CV_8UC1, (void*)nv21_buf.data());
+
+    //cv::Mat rgb;
+    //cv::cvtColor(nv21, rgb, cv::COLOR_YUV2RGB_NV21);
+
+    cv::Mat rgb4(h, w, CV_8UC3);
+    unsigned char* yuv_ptr = nv21.data;
+    unsigned char* y_ptr = yuv_ptr;
+    
+    unsigned char* uvptr = yuv + w * h;
+
+    YUV4202RGB888(yptr, uptr, vptr, rgb4.data, w, h);
+
+    return 0;
+}
+
